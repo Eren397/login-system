@@ -6,6 +6,9 @@ class Usuarios {
     private $senha;
     private $confirmarSenha;
 
+    private $usuarioLogin;
+    private $senhaLogin;
+
     public function getNome() {
         return $this->nome;
     }
@@ -44,6 +47,22 @@ class Usuarios {
 
     public function setSenha2($senha2) {
         $this->confirmarSenha = $senha2;
+    }
+
+    public function getUsuarioLogin() {
+        return $this->usuarioLogin;
+    }
+
+    public function setUsuarioLogin($usuarioLogin) {
+        $this->usuarioLogin = $usuarioLogin;
+    }
+
+    public function getSenhaLogin() {
+        return $this->senhaLogin;
+    }
+
+    public function setSenhaLogin($senhaLogin) {
+        $this->senhaLogin = $senhaLogin;
     }
 
     public function cadastrar($dados) {
@@ -86,7 +105,8 @@ class Usuarios {
                 $sql->bindValue(':n', $nome);
                 $sql->bindValue(':u', $usuario);
                 $sql->bindValue(':e', $email);
-                $sql->bindValue(':s', $senha);
+                $hash = password_hash($senha, PASSWORD_DEFAULT);
+                $sql->bindValue(':s', $hash);
                 $res = $sql->execute();
     
                 if($res) {
@@ -96,7 +116,41 @@ class Usuarios {
                 }
             }         
         }
+    }
 
+    public function login($dados) {
+        $this->setUsuarioLogin($dados['usuario_login']);
+        $this->setSenhaLogin($dados['senha_login']);
+
+        $usuario = trim(strip_tags(addslashes($this->getUsuarioLogin())));
+        $senha = strip_tags(addslashes($this->getSenhaLogin()));
+
+        if(empty($usuario) || empty($senha)) {
+            die('Preencha todos os campos para o login');
+        }else {
+            $conn = Connection::getConn();
+            $sql = 'SELECT id, nome, usuario, email, senha FROM usuarios
+                    WHERE usuario = :u OR email =:u;';
+            $sql = $conn->prepare($sql);
+            $sql->bindValue(':u', $usuario);
+            $sql->execute();
+
+            if($sql->rowCount() > 0) {
+                $dadosUser = $sql->fetch(PDO::FETCH_ASSOC);
+                $pwdVerify = password_verify($senha, $dadosUser['senha']);
+
+                if($pwdVerify) {
+                    session_start();
+                    $_SESSION['id'] = $dadosUser['id'];
+                    $_SESSION['nome'] = $dadosUser['nome'];
+                    header('Location: /login/home');                   
+                }else{
+                    echo 'Senha incorreta';
+                }
+            }else {
+                echo 'Usuário não cadastrado ou está incorreto';
+            }
+        }
     }
 
 }
