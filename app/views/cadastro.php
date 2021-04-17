@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-body">
-        <form action="" name="cad" class="form__cadastro">
+        <form action="cadastro/cadastrar" method="POST" name="cad" class="form__cadastro">
             <label class="form-label">Nome: </label>
             <input type="text" name="nome_cadastro" class="form-control">
             <label class="form-label">Usuário: </label>
