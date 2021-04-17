@@ -22,6 +22,6 @@
     $this->renderView($name, $model);
     ?>
     </div>
-    <!-- <script src="app/assets/js/main.js" type="module"></script> -->
+    <script src="app/assets/js/main.js" type="module"></script>
 </body>
 </html>

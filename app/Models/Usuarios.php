@@ -71,7 +71,30 @@ class Usuarios {
             die('As senhas devem ser iguais');
         }else {
             $conn = Connection::getConn();
-            var_dump($conn);
+            $sql = 'SELECT id FROM usuarios WHERE usuario = :u OR email = :e;';
+            $sql = $conn->prepare($sql);
+            $sql->bindValue(':u', $usuario);
+            $sql->bindValue(':e', $email);
+            $sql->execute();            
+
+            if($sql->rowCount() > 0) {
+                echo 'Usuário já existe';                
+            }else {
+                $conn = Connection::getConn();
+                $sql = 'INSERT INTO usuarios(nome, usuario, email, senha) VALUES (:n, :u, :e, :s);';
+                $sql = $conn->prepare($sql);
+                $sql->bindValue(':n', $nome);
+                $sql->bindValue(':u', $usuario);
+                $sql->bindValue(':e', $email);
+                $sql->bindValue(':s', $senha);
+                $res = $sql->execute();
+    
+                if($res) {
+                    echo 'Cadastrado';
+                }else {
+                    echo 'Erro ao cadastrar. Tente novamente';
+                }
+            }         
         }
 
     }
