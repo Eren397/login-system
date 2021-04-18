@@ -8,7 +8,17 @@
     <title>Sistema de login</title>
 </head>
 <body>
-    <ul class="nav">
+<?php
+    if(isset($_SESSION['id'])) {
+?>
+    <form action="home/logout" method="POST">
+        <button class="btn btn-dark mt-2">Sair</button>
+    </form>
+
+<?php
+    }else {
+?>
+     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link active" href="login">Login</a>
         </li>
@@ -17,6 +27,10 @@
         </li>
     
     </ul>
+<?php
+    }
+?>
+   
     <div class="container mt-5">
     <?php
     $this->renderView($name, $model);

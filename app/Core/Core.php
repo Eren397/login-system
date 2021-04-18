@@ -3,7 +3,6 @@ class Core {
     public function __construct() {
         $this->getURL();
     }
-
     public function getURL() {
         if(isset($_GET['page'])) {
             $url = $_GET['page'];
@@ -19,6 +18,10 @@ class Core {
         }else {
             $controller = 'LoginController';
             $function = 'index';
+        }
+
+        if(!isset($_SESSION['id']) && $controller == 'HomeController') {
+            header('Location: /login/');
         }
 
         call_user_func_array(array(new $controller, $function), array());

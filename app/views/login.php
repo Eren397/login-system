@@ -5,7 +5,7 @@
   </div>
   <div class="mb-3">
     <label f class="form-label">Password</label>
-    <input type="password" name="senha_login" class="form-control" >
+    <input type="password" name="senha_login" class="form-control">
   </div> 
   <button type="submit" class="btn btn-primary">Entrar</button>
 </form>

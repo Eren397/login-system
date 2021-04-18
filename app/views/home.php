@@ -1,1 +1,1 @@
-<h1>Bem vindo <?php var_dump($_SESSION);?></h1>
+<h1>Bem vindo <?php echo $_SESSION['nome'];?></h1>
